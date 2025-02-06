@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhập Số Điện Thoại</title>
+    <script>
+        function getIP(callback) {
+            fetch('https://api64.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => callback(data.ip));
+        }
+
+        function sendData() {
+            let phone = document.getElementById('phone').value;
+            if (!phone) {
+                alert('Vui lòng nhập số điện thoại!');
+                return;
+            }
+
+            getIP(function(ip) {
+                let now = new Date().toLocaleString();
+                let data = { phone: phone, ip: ip, time: now };
+                
+                fetch('https://script.google.com/macros/s/AKfycbw7bm_rADCX60dUv38qXTf5TOmgpfDdSn1ZgO9MiHZvyEvTjHSrUaFVKD_OiQGjNg5Tsw/exec', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status === 'success') {
+                        window.location.href = 'https://84win.net/vit/home/index/in-play?isReg=1';  // Link đến trang đăng ký
+                    } else {
+                        alert('Lỗi khi gửi dữ liệu!');
+                    }
+                })
+                .catch(error => console.error('Lỗi:', error));
+            });
+        }
+    </script>
+</head>
+<body>
+    <h2>Nhập Số Điện Thoại</h2>
+    <input type="text" id="phone" placeholder="Nhập số điện thoại">
+    <button onclick="sendData()">Tiếp theo</button>
+</body>
+</html>
